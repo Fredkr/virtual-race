@@ -1,4 +1,3 @@
-import sirv from 'sirv';
 import express from 'express';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
@@ -8,9 +7,9 @@ import sessionFileStore from 'session-file-store';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config({ path: `./config/${process.env.NODE_ENV}.env`});
 
-const DB_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/virtualrace';
 mongoose.Promise = global.Promise;
 
 const StravaStrategy = require('passport-strava-oauth2').Strategy;
@@ -23,7 +22,7 @@ const setupServer = () => {
     passport.use(new StravaStrategy({
             clientID: process.env.STRAVA_CLIENT_ID,
             clientSecret: process.env.STRAVA_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/strava/callback"
+            callbackURL: `${process.env.BASE_URL}/auth/strava/callback`
         },
         function (accessToken, refreshToken, profile, done) {
             process.nextTick(function () {
@@ -96,7 +95,7 @@ const ensureAuthenticated = (req, res, next) =>{
     res.redirect('/register')
 };
 
-mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(()=> {
         setupServer();
     })

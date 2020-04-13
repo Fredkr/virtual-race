@@ -4,6 +4,6 @@
 yarn-error.log
 /cypress/screenshots/
 /__sapper__/
-.env
+*.env
 .idea
 .session*
