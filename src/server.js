@@ -76,7 +76,7 @@ const setupServer = () => {
         })
         .use(
             compression({threshold: 0}),
-            sirv('static', {dev}),
+            //sirv('static', {dev}),
             sapper.middleware({
                 session: req => {
                     const user = req.session.passport ? req.session.passport.user : null;
